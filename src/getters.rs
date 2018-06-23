@@ -136,7 +136,7 @@ pub(crate) fn impl_enum_as_mut_getters(ast: &DeriveInput) -> quote::Tokens {
     let variant_types = getter_filter!()
         .filter(|v| v.data.fields().len() == 1)
         .map(|v| &v.data.fields()[0].ty)
-        .map(|ty| Ty::Rptr(None, Box::new(MutTy { ty: ty.clone(), mutability: Mutability::Immutable })))
+        .map(|ty| Ty::Rptr(None, Box::new(MutTy { ty: ty.clone(), mutability: Mutability::Mutable })))
         .collect::<Vec<Ty>>();
 
     let getter_names = vec!(name.clone(); variant_types.len());
@@ -145,7 +145,7 @@ pub(crate) fn impl_enum_as_mut_getters(ast: &DeriveInput) -> quote::Tokens {
         #[allow(dead_code)]
         impl #name {
             #(pub fn #function_names(&mut self) -> #variant_types {
-                    if let &#getter_names::#variant_names(ref mut v) = self {
+                    if let &mut #getter_names::#variant_names(ref mut v) = self {
                         v
                     }
                     else {
@@ -173,7 +173,7 @@ pub(crate) fn impl_enum_as_mut_getters(ast: &DeriveInput) -> quote::Tokens {
 
     let variant_types = getter_filter!()
         .filter(|v| v.data.fields().len() > 1)
-        .map(|v| Ty::Tup(v.data.fields().iter().map(|field| Ty::Rptr(None, Box::new(MutTy { ty: field.ty.clone(), mutability: Mutability::Immutable }))).collect::<Vec<Ty>>()))
+        .map(|v| Ty::Tup(v.data.fields().iter().map(|field| Ty::Rptr(None, Box::new(MutTy { ty: field.ty.clone(), mutability: Mutability::Mutable }))).collect::<Vec<Ty>>()))
         .collect::<Vec<Ty>>();
 
     let getter_names_multiple = vec!(name.clone(); variant_types.len());
@@ -192,7 +192,7 @@ pub(crate) fn impl_enum_as_mut_getters(ast: &DeriveInput) -> quote::Tokens {
         #[allow(dead_code)]
         impl #name {
             #(pub fn #function_names(&mut self) -> #variant_types {
-                    if let &#getter_names_multiple::#variant_names(#(ref mut #tuple_args),*) = self {
+                    if let &mut #getter_names_multiple::#variant_names(#(ref mut #tuple_args),*) = self {
                         (#(#tuple_args2), *)
                     }
                     else {
