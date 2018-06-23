@@ -2,7 +2,7 @@
 extern crate enum_methods;
 
 #[test]
-fn test_as_getters() {
+fn test_as_mut_getters() {
     #[derive(EnumAsMutGetters, Debug)]
     enum MyEnum {
         Foo(i64),
@@ -15,17 +15,17 @@ fn test_as_getters() {
     let mut bar = MyEnum::Bar(false);
     let mut baz = MyEnum::Baz("hurry boy, it's waiting there for you".to_string());
     let mut tup = MyEnum::Tup(42, String::from("Hello, Tuple, my old friend!"), vec![true, false, true]);
-    assert_eq!(*foo.as_foo_mut(), 42);
-    assert_eq!(*bar.as_bar_mut(), false);
-    assert_eq!(baz.as_baz_mut(), "hurry boy, it's waiting there for you");
-    assert_eq!(tup.as_tup_mut(), (&mut 42, &mut String::from("Hello, Tuple, my old friend!"), &mut vec![true, false, true]));
+    assert_eq!(*foo.as_mut_foo(), 42);
+    assert_eq!(*bar.as_mut_bar(), false);
+    assert_eq!(baz.as_mut_baz(), "hurry boy, it's waiting there for you");
+    assert_eq!(tup.as_mut_tup(), (&mut 42, &mut String::from("Hello, Tuple, my old friend!"), &mut vec![true, false, true]));
 
-    *foo.as_foo_mut() = 84;
-    assert_eq!(*foo.as_foo_mut(), 84);
+    *foo.as_mut_foo() = 84;
+    assert_eq!(*foo.as_mut_foo(), 84);
 }
 
 #[test]
-fn test_as_getter_names() {
+fn test_as_mut_getter_names() {
     #[derive(EnumAsMutGetters, Debug)]
     enum MyEnum {
         FooBar(bool),
@@ -36,9 +36,9 @@ fn test_as_getter_names() {
     let mut second = MyEnum::BarBaz(
         "there's nothing that a hundred men or more could ever do".to_string(),
     );
-    assert_eq!(*first.as_foo_bar_mut(), true);
+    assert_eq!(*first.as_mut_foo_bar(), true);
     assert_eq!(
-        second.as_bar_baz_mut(),
+        second.as_mut_bar_baz(),
         "there's nothing that a hundred men or more could ever do"
     );
 }
@@ -53,7 +53,7 @@ fn test_getter_structs() {
     }
 
     impl MyEnum {
-        pub fn as_some_struct_mut(&mut self) -> &mut i32 {
+        pub fn as_mut_some_struct(&mut self) -> &mut i32 {
             if let &mut MyEnum::SomeStruct { ref mut foo } = self {
                 foo
             } else {
@@ -67,10 +67,10 @@ fn test_getter_structs() {
         "there's nothing that a hundred men or more could ever do".to_string(),
     );
     let mut third = MyEnum::SomeStruct { foo: 42 };
-    assert_eq!(*first.as_foo_bar_mut(), true);
+    assert_eq!(*first.as_mut_foo_bar(), true);
     assert_eq!(
-        second.as_bar_baz_mut(),
+        second.as_mut_bar_baz(),
         "there's nothing that a hundred men or more could ever do"
     );
-    assert_eq!(*third.as_some_struct_mut(), 42);
+    assert_eq!(*third.as_mut_some_struct(), 42);
 }

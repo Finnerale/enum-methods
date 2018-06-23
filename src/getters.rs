@@ -125,7 +125,7 @@ pub(crate) fn impl_enum_as_mut_getters(ast: &DeriveInput) -> quote::Tokens {
 
     let function_names = getter_filter!()
         .filter(|v| v.data.fields().len() == 1)
-        .map(|v| format!("as_{}_mut", to_snake_case(&v.ident)).into())
+        .map(|v| format!("as_mut_{}", to_snake_case(&v.ident)).into())
         .collect::<Vec<Ident>>();
 
     let function_name_strs = getter_filter!()
@@ -149,7 +149,7 @@ pub(crate) fn impl_enum_as_mut_getters(ast: &DeriveInput) -> quote::Tokens {
                         v
                     }
                     else {
-                        panic!(concat!("called as_", #function_name_strs, "_mut() on {:?}"), self);
+                        panic!(concat!("called as_mut_", #function_name_strs, "() on {:?}"), self);
                     }
                 }
             )*
@@ -163,7 +163,7 @@ pub(crate) fn impl_enum_as_mut_getters(ast: &DeriveInput) -> quote::Tokens {
 
     let function_names = getter_filter!()
         .filter(|v| v.data.fields().len() > 1)
-        .map(|v| format!("as_{}_mut", to_snake_case(&v.ident)).into())
+        .map(|v| format!("as_mut_{}", to_snake_case(&v.ident)).into())
         .collect::<Vec<Ident>>();
 
     let function_name_strs = getter_filter!()
@@ -196,7 +196,7 @@ pub(crate) fn impl_enum_as_mut_getters(ast: &DeriveInput) -> quote::Tokens {
                         (#(#tuple_args2), *)
                     }
                     else {
-                        panic!(concat!("called as_", #function_name_strs, "_mut() on {:?}"), self);
+                        panic!(concat!("called as_mut_", #function_name_strs, "() on {:?}"), self);
                     }
                 }
             )*
