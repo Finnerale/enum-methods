@@ -145,6 +145,16 @@ pub fn enum_as_getters(input: TokenStream) -> TokenStream {
     getters.parse().unwrap()
 }
 
+#[proc_macro_derive(EnumAsMutGetters)]
+#[doc(hidden)]
+pub fn enum_as_mut_getters(input: TokenStream) -> TokenStream {
+    let s = input.to_string();
+    let ast = parse_derive_input(&s).unwrap();
+    let getters = impl_enum_as_mut_getters(&ast);
+    //panic!("{:#?}", getters);
+    getters.parse().unwrap()
+}
+
 #[proc_macro_derive(EnumIntoGetters)]
 #[doc(hidden)]
 pub fn enum_into_getters(input: TokenStream) -> TokenStream {
