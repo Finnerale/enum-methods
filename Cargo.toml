@@ -1,6 +1,6 @@
 [package]
 name = "enum-methods"
-version = "0.0.8"
+version = "0.0.9"
 authors = ["Alek Ratzloff <alekratz@gmail.com>"]
 homepage = "https://github.com/alekratz/enum-methods"
 description = "Generates methods for each enum variant."
